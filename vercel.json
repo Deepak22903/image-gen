@@ -4,16 +4,40 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "styles.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "script.js",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "server.js"
+      "src": "/styles.css",
+      "dest": "/styles.css"
     },
     {
-      "src": "/(.*)",
-      "dest": "server.js"
+      "src": "/script.js",
+      "dest": "/script.js"
+    },
+    {
+      "src": "/api/generate",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/api/health",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
     }
   ]
 }

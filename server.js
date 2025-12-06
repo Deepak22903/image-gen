@@ -146,18 +146,24 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(PORT, () => {
-    console.log('');
-    console.log('🎨 AI Image Generator Server');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log(`🌐 Server running at: http://localhost:${PORT}`);
-    console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
-    console.log('');
-    if (CLOUDFLARE_ACCOUNT_ID && CLOUDFLARE_API_TOKEN) {
-        console.log('✅ Cloudflare credentials loaded');
-    } else {
-        console.log('⚠️  Warning: Missing Cloudflare credentials');
-    }
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('');
-});
+// Export for Vercel serverless
+module.exports = app;
+
+// Only start server if not in serverless environment
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log('');
+        console.log('🎨 AI Image Generator Server');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log(`🌐 Server running at: http://localhost:${PORT}`);
+        console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
+        console.log('');
+        if (CLOUDFLARE_ACCOUNT_ID && CLOUDFLARE_API_TOKEN) {
+            console.log('✅ Cloudflare credentials loaded');
+        } else {
+            console.log('⚠️  Warning: Missing Cloudflare credentials');
+        }
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('');
+    });
+}
