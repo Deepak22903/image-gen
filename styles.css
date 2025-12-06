@@ -1,0 +1,422 @@
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #8b5cf6;
+    --background: #0f172a;
+    --surface: #1e293b;
+    --surface-light: #334155;
+    --text: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --error: #ef4444;
+    --success: #10b981;
+    --border: #334155;
+    --shadow: rgba(0, 0, 0, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, var(--background) 0%, #1a1f3a 100%);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInDown 0.6s ease-out;
+}
+
+header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.form-section,
+.result-section {
+    background: var(--surface);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 20px 60px var(--shadow);
+    border: 1px solid var(--border);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.form-group small {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--background);
+    border: 2px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    font-family: inherit;
+}
+
+.form-group input[type="range"] {
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.form-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--primary);
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="range"]::-webkit-slider-thumb:hover {
+    background: var(--primary-dark);
+    transform: scale(1.2);
+}
+
+.form-group input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--primary);
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.advanced-options {
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background: var(--background);
+}
+
+.advanced-options summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--primary);
+    user-select: none;
+    list-style: none;
+}
+
+.advanced-options summary::-webkit-details-marker {
+    display: none;
+}
+
+.advanced-options summary::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.advanced-options[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.advanced-options[open] {
+    padding-bottom: 1rem;
+}
+
+.generate-btn {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.generate-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+}
+
+.generate-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.generate-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.result-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+}
+
+.placeholder {
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.placeholder svg {
+    margin-bottom: 1rem;
+    color: var(--border);
+}
+
+.placeholder p {
+    font-size: 1.1rem;
+}
+
+#resultContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#generatedImage {
+    max-width: 100%;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 40px var(--shadow);
+    margin-bottom: 1.5rem;
+    animation: zoomIn 0.5s ease-out;
+}
+
+.image-actions {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.action-btn.secondary {
+    background: var(--surface-light);
+}
+
+.action-btn.secondary:hover {
+    background: var(--border);
+}
+
+.error-container {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 2px solid var(--error);
+    border-radius: 0.5rem;
+    animation: shake 0.5s ease-out;
+}
+
+.error-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.error-icon {
+    font-size: 2rem;
+}
+
+.error-container strong {
+    display: block;
+    color: var(--error);
+    margin-bottom: 0.5rem;
+}
+
+.error-container p {
+    color: var(--text-secondary);
+}
+
+footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+}
+
+.model-info {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+    
+    header h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .form-section,
+    .result-section {
+        padding: 1.5rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .image-actions {
+        flex-direction: column;
+    }
+}

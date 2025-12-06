@@ -1,153 +1,173 @@
-# LLM Chat Application Template
+# 🎨 AI Image Generator
 
-A simple, ready-to-deploy chat application template powered by Cloudflare Workers AI. This template provides a clean starting point for building AI chat applications with streaming responses.
+A modern web application for generating images using Cloudflare Workers AI. Supports multiple state-of-the-art models including FLUX.1 Schnell, FLUX.2 Dev, and SDXL Lightning.
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/llm-chat-app-template)
+![AI Image Generator](https://img.shields.io/badge/AI-Image%20Generation-blue)
+![Cloudflare Workers AI](https://img.shields.io/badge/Cloudflare-Workers%20AI-orange)
 
-<!-- dash-content-start -->
+## ✨ Features
 
-## Demo
+- 🤖 **Multiple AI Models**: Choose from FLUX.1 Schnell, FLUX.2 Dev, or SDXL Lightning
+- ⚡ **Fast Generation**: Lightning-fast image generation with optimized models
+- 🎨 **Advanced Controls**: Fine-tune your images with steps, guidance, dimensions, and more
+- 📱 **Responsive Design**: Beautiful UI that works on desktop and mobile
+- 💾 **Easy Download**: Download generated images with one click
+- 🔄 **Real-time Preview**: See your images instantly after generation
 
-This template demonstrates how to build an AI-powered chat interface using Cloudflare Workers AI with streaming responses. It features:
-
-- Real-time streaming of AI responses using Server-Sent Events (SSE)
-- Easy customization of models and system prompts
-- Support for AI Gateway integration
-- Clean, responsive UI that works on mobile and desktop
-
-## Features
-
-- 💬 Simple and responsive chat interface
-- ⚡ Server-Sent Events (SSE) for streaming responses
-- 🧠 Powered by Cloudflare Workers AI LLMs
-- 🛠️ Built with TypeScript and Cloudflare Workers
-- 📱 Mobile-friendly design
-- 🔄 Maintains chat history on the client
-- 🔎 Built-in Observability logging
-<!-- dash-content-end -->
-
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18 or newer)
-- [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/)
+- Node.js (v14 or higher)
 - A Cloudflare account with Workers AI access
+- Cloudflare API Token
 
 ### Installation
 
-1. Clone this repository:
+1. **Clone or download this repository**
 
-   ```bash
-   git clone https://github.com/cloudflare/templates.git
-   cd templates/llm-chat-app
-   ```
-
-2. Install dependencies:
-
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. Generate Worker type definitions:
+3. **Configure environment variables**
+   
+   Copy `.env.example` to `.env`:
    ```bash
-   npm run cf-typegen
+   cp .env.example .env
+   ```
+   
+   Edit `.env` and add your Cloudflare credentials:
+   ```env
+   CLOUDFLARE_ACCOUNT_ID=your_account_id_here
+   CLOUDFLARE_API_TOKEN=your_api_token_here
+   PORT=3000
    ```
 
-### Development
+### Getting Cloudflare Credentials
 
-Start a local development server:
+1. **Account ID**:
+   - Log in to [Cloudflare Dashboard](https://dash.cloudflare.com)
+   - Select your account
+   - Copy the Account ID from the right sidebar
 
-```bash
-npm run dev
+2. **API Token**:
+   - Go to [API Tokens](https://dash.cloudflare.com/profile/api-tokens)
+   - Click "Create Token"
+   - Use the "Workers AI" template or create a custom token with:
+     - Workers AI Read/Write permissions
+     - Account Resources: Include your account
+   - Copy and save the token securely
+
+### Running the Application
+
+1. **Start the server**
+   ```bash
+   npm start
+   ```
+   
+   For development with auto-reload:
+   ```bash
+   npm run dev
+   ```
+
+2. **Open your browser**
+   
+   Navigate to: `http://localhost:3000`
+
+## 🎯 Usage
+
+1. **Select a Model**: Choose from the available AI models in the dropdown
+2. **Enter Your Prompt**: Describe the image you want to generate
+3. **Adjust Settings** (Optional): Expand "Advanced Options" to fine-tune:
+   - Negative prompt (what to avoid)
+   - Image dimensions (width/height)
+   - Steps (quality vs speed)
+   - Guidance (prompt adherence)
+   - Seed (reproducibility)
+4. **Generate**: Click "Generate Image" or press Ctrl/Cmd + Enter
+5. **Download**: Save your generated image
+
+## 🤖 Available Models
+
+### FLUX.1 Schnell (Fast)
+- **Speed**: Ultra-fast generation (1-8 steps)
+- **Quality**: High quality at 1024px
+- **Best for**: Quick iterations and prototyping
+
+### FLUX.2 Dev (Premium)
+- **Speed**: Moderate
+- **Quality**: Highly realistic and detailed
+- **Best for**: Professional, photorealistic images
+
+### SDXL Lightning (Balanced)
+- **Speed**: Lightning-fast
+- **Quality**: Excellent 1024px images
+- **Best for**: Balanced quality and speed
+
+## 📁 Project Structure
+
+```
+ImageGen/
+├── index.html          # Main HTML file
+├── styles.css          # Styling and animations
+├── script.js           # Frontend JavaScript
+├── server.js           # Express backend server
+├── package.json        # Dependencies
+├── .env.example        # Environment variables template
+├── .gitignore          # Git ignore rules
+└── README.md           # This file
 ```
 
-This will start a local server at http://localhost:8787.
+## 🛠️ Technologies Used
 
-Note: Using Workers AI accesses your Cloudflare account even during local development, which will incur usage charges.
+- **Frontend**: HTML5, CSS3, Vanilla JavaScript
+- **Backend**: Node.js, Express
+- **AI Models**: Cloudflare Workers AI
+  - FLUX.1 Schnell by Black Forest Labs
+  - FLUX.2 Dev by Black Forest Labs
+  - SDXL Lightning by ByteDance
 
-### Deployment
+## 💡 Tips
 
-Deploy to Cloudflare Workers:
+- Use descriptive prompts for better results
+- Experiment with different models for various styles
+- Higher steps = better quality but slower generation
+- Use negative prompts to avoid unwanted elements
+- Set a seed value to reproduce the same image
 
-```bash
-npm run deploy
-```
+## 🔧 Troubleshooting
 
-### Monitor
+**Images not generating?**
+- Check your `.env` file has correct credentials
+- Verify your Cloudflare account has Workers AI enabled
+- Check the browser console for errors
 
-View real-time logs associated with any deployed Worker:
+**Slow generation?**
+- Try reducing the number of steps
+- Use FLUX.1 Schnell for faster results
+- Check your internet connection
 
-```bash
-npm wrangler tail
-```
+**API errors?**
+- Verify your API token has Workers AI permissions
+- Check if you've exceeded your usage limits
+- Ensure your account ID is correct
 
-## Project Structure
+## 📄 License
 
-```
-/
-├── public/             # Static assets
-│   ├── index.html      # Chat UI HTML
-│   └── chat.js         # Chat UI frontend script
-├── src/
-│   ├── index.ts        # Main Worker entry point
-│   └── types.ts        # TypeScript type definitions
-├── test/               # Test files
-├── wrangler.jsonc      # Cloudflare Worker configuration
-├── tsconfig.json       # TypeScript configuration
-└── README.md           # This documentation
-```
+MIT License - Feel free to use this project for personal or commercial purposes.
 
-## How It Works
+## 🤝 Contributing
 
-### Backend
+Contributions are welcome! Feel free to submit issues or pull requests.
 
-The backend is built with Cloudflare Workers and uses the Workers AI platform to generate responses. The main components are:
+## 🔗 Resources
 
-1. **API Endpoint** (`/api/chat`): Accepts POST requests with chat messages and streams responses
-2. **Streaming**: Uses Server-Sent Events (SSE) for real-time streaming of AI responses
-3. **Workers AI Binding**: Connects to Cloudflare's AI service via the Workers AI binding
+- [Cloudflare Workers AI Docs](https://developers.cloudflare.com/workers-ai/)
+- [FLUX Models](https://blackforestlabs.ai/)
+- [SDXL Lightning](https://huggingface.co/ByteDance/SDXL-Lightning)
 
-### Frontend
+---
 
-The frontend is a simple HTML/CSS/JavaScript application that:
-
-1. Presents a chat interface
-2. Sends user messages to the API
-3. Processes streaming responses in real-time
-4. Maintains chat history on the client side
-
-## Customization
-
-### Changing the Model
-
-To use a different AI model, update the `MODEL_ID` constant in `src/index.ts`. You can find available models in the [Cloudflare Workers AI documentation](https://developers.cloudflare.com/workers-ai/models/).
-
-### Using AI Gateway
-
-The template includes commented code for AI Gateway integration, which provides additional capabilities like rate limiting, caching, and analytics.
-
-To enable AI Gateway:
-
-1. [Create an AI Gateway](https://dash.cloudflare.com/?to=/:account/ai/ai-gateway) in your Cloudflare dashboard
-2. Uncomment the gateway configuration in `src/index.ts`
-3. Replace `YOUR_GATEWAY_ID` with your actual AI Gateway ID
-4. Configure other gateway options as needed:
-   - `skipCache`: Set to `true` to bypass gateway caching
-   - `cacheTtl`: Set the cache time-to-live in seconds
-
-Learn more about [AI Gateway](https://developers.cloudflare.com/ai-gateway/).
-
-### Modifying the System Prompt
-
-The default system prompt can be changed by updating the `SYSTEM_PROMPT` constant in `src/index.ts`.
-
-### Styling
-
-The UI styling is contained in the `<style>` section of `public/index.html`. You can modify the CSS variables at the top to quickly change the color scheme.
-
-## Resources
-
-- [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
-- [Cloudflare Workers AI Documentation](https://developers.cloudflare.com/workers-ai/)
-- [Workers AI Models](https://developers.cloudflare.com/workers-ai/models/)
+Made with ❤️ using Cloudflare Workers AI
