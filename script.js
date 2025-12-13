@@ -91,8 +91,8 @@ async function generateImage() {
             throw new Error(result.error || 'Failed to generate image');
         }
 
-        // Display the generated image
-        displayImage(result.image);
+        // Display the generated images (4 images)
+        displayImages(result.images);
 
     } catch (error) {
         console.error('Error:', error);
@@ -102,7 +102,97 @@ async function generateImage() {
     }
 }
 
-// Display generated image
+// Display generated images (4 images)
+function displayImages(images) {
+    placeholder.style.display = 'none';
+    errorContainer.style.display = 'none';
+    resultContainer.style.display = 'flex';
+    
+    // Clear previous images
+    resultContainer.innerHTML = '';
+    
+    // Create grid container
+    const gridContainer = document.createElement('div');
+    gridContainer.className = 'image-grid';
+    
+    images.forEach((base64Image, index) => {
+        const imageWrapper = document.createElement('div');
+        imageWrapper.className = 'image-wrapper';
+        
+        const img = document.createElement('img');
+        img.src = `data:image/png;base64,${base64Image}`;
+        img.alt = `Generated image ${index + 1}`;
+        img.dataset.image = base64Image;
+        img.className = 'grid-image';
+        
+        // Click to select
+        img.addEventListener('click', () => {
+            selectImage(base64Image, img);
+        });
+        
+        imageWrapper.appendChild(img);
+        gridContainer.appendChild(imageWrapper);
+    });
+    
+    resultContainer.appendChild(gridContainer);
+    
+    // Add action buttons
+    const actionsDiv = document.createElement('div');
+    actionsDiv.className = 'image-actions';
+    actionsDiv.innerHTML = `
+        <button id="downloadSelectedBtn" class="action-btn" disabled>
+            📥 Download Selected
+        </button>
+        <button id="newImageBtn" class="action-btn secondary">
+            ✨ Generate New
+        </button>
+    `;
+    resultContainer.appendChild(actionsDiv);
+    
+    // Attach event listeners
+    document.getElementById('downloadSelectedBtn').addEventListener('click', downloadSelected);
+    document.getElementById('newImageBtn').addEventListener('click', generateNew);
+}
+
+let selectedImage = null;
+let selectedImgElement = null;
+
+function selectImage(base64Image, imgElement) {
+    // Remove previous selection
+    if (selectedImgElement) {
+        selectedImgElement.classList.remove('selected');
+    }
+    
+    // Set new selection
+    selectedImage = base64Image;
+    selectedImgElement = imgElement;
+    imgElement.classList.add('selected');
+    
+    // Enable download button
+    document.getElementById('downloadSelectedBtn').disabled = false;
+}
+
+function downloadSelected() {
+    if (!selectedImage) return;
+    
+    const dataURI = `data:image/png;base64,${selectedImage}`;
+    const link = document.createElement('a');
+    link.href = dataURI;
+    link.download = `ai-generated-${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function generateNew() {
+    selectedImage = null;
+    selectedImgElement = null;
+    resultContainer.style.display = 'none';
+    placeholder.style.display = 'block';
+    form.scrollIntoView({ behavior: 'smooth' });
+}
+
+// OLD - Display single generated image (kept for reference)
 function displayImage(base64Image) {
     placeholder.style.display = 'none';
     errorContainer.style.display = 'none';

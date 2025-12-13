@@ -263,6 +263,46 @@ header p {
     align-items: center;
 }
 
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.image-wrapper:hover {
+    transform: scale(1.02);
+}
+
+.grid-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 0.5rem;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+    animation: zoomIn 0.5s ease-out;
+}
+
+.grid-image.selected {
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+.grid-image:hover {
+    border-color: var(--primary);
+    opacity: 0.9;
+}
+
 #generatedImage {
     max-width: 100%;
     border-radius: 0.5rem;
@@ -418,5 +458,9 @@ footer {
     
     .image-actions {
         flex-direction: column;
+    }
+    
+    .image-grid {
+        grid-template-columns: 1fr;
     }
 }

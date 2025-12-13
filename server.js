@@ -30,6 +30,123 @@ app.post('/api/generate', async (req, res) => {
             return res.status(400).json({ error: 'Model and prompt are required' });
         }
 
+        console.log(`🎨 Generating 4 images with ${model}...`);
+        console.log(`📝 Prompt: ${prompt}`);
+
+        // Generate 4 images with different seeds
+        const imagePromises = [];
+        for (let i = 0; i < 4; i++) {
+            const baseSeed = seed || Math.floor(Math.random() * 1000000);
+            const currentSeed = baseSeed + i;
+            imagePromises.push(generateSingleImage(model, prompt, negative_prompt, width, height, steps, guidance, currentSeed));
+        }
+
+        const images = await Promise.all(imagePromises);
+        
+        console.log('✅ All 4 images generated successfully');
+        return res.json({ images: images });
+
+    } catch (error) {
+        console.error('Error generating images:', error);
+        res.status(500).json({ 
+            error: 'Failed to generate images. Please try again.' 
+        });
+    }
+});
+
+// Helper function to generate a single image
+async function generateSingleImage(model, prompt, negative_prompt, width, height, steps, guidance, seed) {
+    const apiUrl = `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/ai/run/${model}`;
+
+    try {
+        if (model === '@cf/black-forest-labs/flux-2-dev') {
+            // FLUX.2 uses multipart/form-data
+            const form = new FormData();
+            
+            form.append('prompt', prompt);
+            if (width) form.append('width', width.toString());
+            if (height) form.append('height', height.toString());
+            if (steps) form.append('steps', steps.toString());
+            if (seed) form.append('seed', seed.toString());
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${CLOUDFLARE_API_TOKEN}`
+                },
+                body: form
+            });
+
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            const image = result.image || (result.result && result.result.image);
+            
+            if (!image) {
+                throw new Error('No image data received from API');
+            }
+
+            return image;
+
+        } else {
+            // FLUX.1 Schnell and SDXL Lightning use JSON
+            const requestBody = { prompt };
+
+            if (negative_prompt) requestBody.negative_prompt = negative_prompt;
+            if (width) requestBody.width = width;
+            if (height) requestBody.height = height;
+            if (steps) requestBody.num_steps = steps;
+            if (guidance) requestBody.guidance = guidance;
+            if (seed) requestBody.seed = seed;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${CLOUDFLARE_API_TOKEN}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.statusText}`);
+            }
+
+            // For SDXL Lightning, response is binary image
+            if (model === '@cf/bytedance/stable-diffusion-xl-lightning') {
+                const imageBuffer = await response.arrayBuffer();
+                const base64Image = Buffer.from(imageBuffer).toString('base64');
+                return base64Image;
+            } else {
+                // For FLUX.1 Schnell, response is JSON with base64 image
+                const result = await response.json();
+                const image = result.image || (result.result && result.result.image);
+                
+                if (!image) {
+                    throw new Error('No image data received from API');
+                }
+
+                return image;
+            }
+        }
+    } catch (error) {
+        console.error('Error in generateSingleImage:', error);
+        throw error;
+    }
+}
+
+// Old endpoint kept for reference - will be removed
+app.post('/api/generate-old', async (req, res) => {
+    try {
+        const { model, prompt, negative_prompt, width, height, steps, guidance, seed } = req.body;
+
+        // Validate required fields
+        if (!model || !prompt) {
+            return res.status(400).json({ error: 'Model and prompt are required' });
+        }
+
         console.log(`🎨 Generating image with ${model}...`);
         console.log(`📝 Prompt: ${prompt}`);
 
